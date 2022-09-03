@@ -1,10 +1,34 @@
 import pennylane.numpy as np
+import pandas as pd
 
 rng = np.random.default_rng()
 
 # Generate random numbers in the given range and with the given shape for the initial weights of the model.
 def generate_theta(min_theta, max_theta, shape):
     return rng.uniform(min_theta, max_theta, shape, requires_grad=True)
+
+def get_wine_dataset(n_data: int = None):
+    df_raw = pd.read_csv("datasets/red_wine.csv")
+
+    if n_data is not None:
+        df_raw = df_raw.sample(n=n_data)
+
+    # Normalize output between 0 and 1
+    df_raw["quality"] -= df_raw["quality"].min()
+    df_raw["quality"] /= df_raw["quality"].max()
+
+    columns = df_raw.columns.tolist()
+    input_cols = columns[:-1]
+    output_cols = columns[-1]
+
+    inputs_numpy = df_raw[input_cols].to_numpy()
+    outputs_numpy = df_raw[output_cols].to_numpy()
+
+    x = np.array(inputs_numpy)
+    y = np.array(outputs_numpy)
+
+    return x, y
+
 
 
 # Creates a dataset where both x (data) and y (label) are random

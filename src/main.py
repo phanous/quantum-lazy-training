@@ -3,9 +3,9 @@ import time
 import pennylane as qml
 import pennylane.numpy as np
 
-from data import create_random_dataset, generate_theta
+from data import create_random_dataset, generate_theta, get_wine_dataset
 from kernel import compute_scalar_kernel
-from local_model import nocone_arr
+from local_model import no_lightcone_local_model
 from plot import plot_errors, plot_kernel_histogram, plot_laziness
 from train import (
     compute_laziness_over_iterations,
@@ -26,29 +26,46 @@ angle_encoding_axis = "Y"
 variational_unitary = qml.RX
 entangling_gate = qml.CZ
 
-n_qubits = 10
+##### This section is manually set for random-ish datasets
+# n_qubits = 10
+# n_layers = 2
+
+# data_dim = 3
+# n_data = 10
+
+# min_y, max_y = -1, 1
+# min_x, max_x = -2 * np.pi, 2 * np.pi
+
+
+# # Initializing the dataset w.r.t the number of data, the number of data features and the number of qubits.
+# x, y = create_random_dataset(n_data, n_qubits, data_dim, min_x, max_x, min_y, max_y)
+# x_prime, y_prime = create_random_dataset(
+#     n_data, n_qubits, data_dim, min_x, max_x, min_y, max_y
+# )
+
+###### Otherwise, uncomment these following lines:
+
+n_data = 50
+
+x, y = get_wine_dataset(n_data)
+
+data_dim = x.shape[1]
+
+n_qubits = data_dim
 n_layers = 2
 
-data_dim = 3
-n_data = 10
+##### Ends here
 
-steps = 300
-
-min_y, max_y = -1, 1
-min_x, max_x = -2 * np.pi, 2 * np.pi
+# Initializing the randomly initialized variational parameters.
 min_theta, max_theta = -2 * np.pi, 2 * np.pi
+
+theta = generate_theta(min_theta, max_theta, (n_layers, n_qubits))
+
+# Fixed number of learning steps
+steps = 100
 
 # The config string used to save the experiment data.
 config_str = f"q{n_qubits}-l{n_layers}-d{n_data}-m{data_dim}-s{steps}"
-
-# Initializing the dataset w.r.t the number of data, the number of data features and the number of qubits.
-x, y = create_random_dataset(n_data, n_qubits, data_dim, min_x, max_x, min_y, max_y)
-x_prime, y_prime = create_random_dataset(
-    n_data, n_qubits, data_dim, min_x, max_x, min_y, max_y
-)
-
-# Initializing the randomly initialized variational parameters.
-theta = generate_theta(min_theta, max_theta, (n_layers, n_qubits))
 
 # Main function to draw the kernel histogram.
 def main_histogram(load_data: bool = False):
@@ -206,8 +223,8 @@ def main_lazy(lazy_qubits: list, load_data: bool = False, over_qubits: bool = Fa
 # Main function to compute the gradients and print the results.
 def main_grad():
     t = theta.flatten()
-    f = nocone_arr(x[0], theta, n_qubits, n_layers, True, True)
-    grad_fn = qml.jacobian(nocone_arr, argnum=1)
+    f = no_lightcone_local_model(x[0], theta, n_qubits, n_layers, True, True)
+    grad_fn = qml.jacobian(no_lightcone_local_model, argnum=1)
     grad_t = grad_fn(x[0], t, n_qubits, n_layers, False, False)
     grad_t = np.around(grad_t, decimals=4)
     print(f"x = {x}")
@@ -222,8 +239,8 @@ def main():
     main_errplot(
         load_data=False,
         do_local=True,
-        do_global=True,
-        do_global_linear=True,
+        do_global=False,
+        do_global_linear=False,
         do_local_linear=True,
     )
 
