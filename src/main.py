@@ -3,7 +3,7 @@ import time
 import pennylane as qml
 import pennylane.numpy as np
 
-from data import create_random_dataset, generate_theta, get_wine_dataset
+from data import create_random_dataset, generate_theta, get_iris_dataset, get_wine_dataset
 from kernel import compute_scalar_kernel
 from local_model import no_lightcone_local_model
 from plot import plot_errors, plot_kernel_histogram, plot_laziness
@@ -47,7 +47,7 @@ entangling_gate = qml.CZ
 
 n_data = 50
 
-x, y = get_wine_dataset(n_data)
+x, y = get_iris_dataset(n_data)
 
 data_dim = x.shape[1]
 

@@ -4,3 +4,4 @@ matplotlib==3.5.2
 seaborn==0.11.2
 pennylane-qulacs==0.16.0
 qulacs==0.3.0
+pandas==1.4.4

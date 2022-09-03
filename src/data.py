@@ -30,6 +30,31 @@ def get_wine_dataset(n_data: int = None):
     return x, y
 
 
+def get_iris_dataset(n_data: int = None):
+    df_raw = pd.read_csv("datasets/iris.csv")
+
+    if n_data is not None:
+        df_raw = df_raw.sample(n=n_data)
+
+    # Map categorical data to integers
+    df_raw["variety"] = pd.factorize(df_raw["variety"])[0]
+
+    # Normalize output between 0 and 1
+    # df_raw["variety"] -= df_raw["quality"].min()
+    df_raw["variety"] /= df_raw["variety"].max()
+
+    columns = df_raw.columns.tolist()
+    input_cols = columns[:-1]
+    output_cols = columns[-1]
+
+    inputs_numpy = df_raw[input_cols].to_numpy()
+    outputs_numpy = df_raw[output_cols].to_numpy()
+
+    x = np.array(inputs_numpy)
+    y = np.array(outputs_numpy)
+
+    return x, y
+
 
 # Creates a dataset where both x (data) and y (label) are random
 # x has the size of (n_data, n_qubits) whose values repeats every `data_dim` times (only `data_dim` features)
