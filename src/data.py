@@ -7,15 +7,19 @@ rng = np.random.default_rng()
 def generate_theta(min_theta, max_theta, shape):
     return rng.uniform(min_theta, max_theta, shape, requires_grad=True)
 
-def get_wine_dataset(n_data: int = None):
+def get_wine_dataset(n_data: int = None, multiply_items_rate: int = 0):
     df_raw = pd.read_csv("datasets/red_wine.csv")
 
     if n_data is not None:
         df_raw = df_raw.sample(n=n_data)
 
     # Normalize output between 0 and 1
-    df_raw["quality"] -= df_raw["quality"].min()
-    df_raw["quality"] /= df_raw["quality"].max()
+    # df_raw["quality"] -= df_raw["quality"].min()
+    # df_raw["quality"] /= df_raw["quality"].max()
+    
+    for i in range(multiply_items_rate):
+        for col in df_raw.columns:
+            df_raw[col + str(i)] = df_raw[col]
 
     columns = df_raw.columns.tolist()
     input_cols = columns[:-1]
@@ -30,18 +34,25 @@ def get_wine_dataset(n_data: int = None):
     return x, y
 
 
-def get_iris_dataset(n_data: int = None):
+def get_iris_dataset(n_data: int = None, drop_bigger_than: int = None, multiply_items_rate: int = 0):
     df_raw = pd.read_csv("datasets/iris.csv")
-
-    if n_data is not None:
-        df_raw = df_raw.sample(n=n_data)
 
     # Map categorical data to integers
     df_raw["variety"] = pd.factorize(df_raw["variety"])[0]
+    
+    if drop_bigger_than is not None:
+        df_raw = df_raw.drop(df_raw[df_raw.variety > drop_bigger_than].index)
+        
+    if n_data is not None:
+        df_raw = df_raw.sample(n=n_data)
 
     # Normalize output between 0 and 1
     # df_raw["variety"] -= df_raw["quality"].min()
-    df_raw["variety"] /= df_raw["variety"].max()
+    # df_raw["variety"] /= df_raw["variety"].max()
+    
+    for i in range(multiply_items_rate):
+        for col in df_raw.columns:
+            df_raw[col + str(i)] = df_raw[col]
 
     columns = df_raw.columns.tolist()
     input_cols = columns[:-1]

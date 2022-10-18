@@ -45,9 +45,9 @@ entangling_gate = qml.CZ
 
 ###### Otherwise, uncomment these following lines:
 
-n_data = 50
+n_data = 100
 
-x, y = get_iris_dataset(n_data)
+x, y = get_iris_dataset(n_data, drop_bigger_than=1, multiply_items_rate=5)
 
 data_dim = x.shape[1]
 
