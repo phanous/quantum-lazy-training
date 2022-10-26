@@ -20,6 +20,9 @@ def get_wine_dataset(n_data: int = None, multiply_items_rate: int = 0):
     for i in range(multiply_items_rate):
         for col in df_raw.columns:
             df_raw[col + str(i)] = df_raw[col]
+    
+    # To fragmentize dataframe again
+    df_raw = df_raw.copy()
 
     columns = df_raw.columns.tolist()
     input_cols = columns[:-1]
