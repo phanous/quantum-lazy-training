@@ -49,17 +49,21 @@ def get_iris_dataset(n_data: int = None, drop_bigger_than: int = None, multiply_
     # Normalize output between 0 and 1
     # df_raw["variety"] -= df_raw["quality"].min()
     # df_raw["variety"] /= df_raw["variety"].max()
-    
+
+    raw_input_cols = df_raw.columns.tolist()[:-1]
+
+    inputs_pandas = df_raw[raw_input_cols].copy()
+    outputs = df_raw.pop("variety")
+
     for i in range(multiply_items_rate):
-        for col in df_raw.columns:
-            df_raw[col + str(i)] = df_raw[col]
+        for col in inputs_pandas.columns:
+            df_raw[col + str(i)] = inputs_pandas[col]
 
     columns = df_raw.columns.tolist()
     input_cols = columns[:-1]
-    output_cols = columns[-1]
 
     inputs_numpy = df_raw[input_cols].to_numpy()
-    outputs_numpy = df_raw[output_cols].to_numpy()
+    outputs_numpy = outputs.to_numpy()
 
     x = np.array(inputs_numpy)
     y = np.array(outputs_numpy)
