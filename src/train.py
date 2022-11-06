@@ -106,7 +106,7 @@ def train_models(
     do_global_linear: bool = True,
     verbose: bool = False,
 ):
-    print("Started training models...")
+    print("Initializing models...")
     # Avoid not defined errors
     (
         local_grad_w0_s,
@@ -195,6 +195,8 @@ def train_models(
         y_s=y,
         n_data=n_data,
     )
+
+    print("Started training models...")
 
     for j in range(steps):
 
