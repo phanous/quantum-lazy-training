@@ -32,13 +32,13 @@ Note that the data and the plots generated are named in the following convention
 
     First off, you need to make a python virtual environment.
     Type one of the following commands in the terminal:
-`python -m venv venv` in Windows
+`python -m venv venv` in Windows \
 `python3 -m venv venv` in Linux
 
     
     Then, you need to activate the virtual environment.
     Type one of the following commands in the terminal:
-`source venv/Scripts/activate` in Windows
+`source venv/Scripts/activate` in Windows \
 `source venv/bin/activate` in Linux
 
     After making sure the virtual environment is activated, you need to install the dependencies.
