@@ -50,6 +50,6 @@ Note that the data and the plots generated are named in the following convention
 `python src/main.py`
 
     By default, the main module will run the code for plotting the error curves
-    for a certain hyperparameters hardcoded in the start of "main.py".
+    for a certain set of hyperparameters hardcoded in the start of "main.py".
     You can change this behavior by either changing the hyperparameters or
     by changing the "main()" function of "main.py" to run another aspect of the experiment.
