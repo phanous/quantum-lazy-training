@@ -38,7 +38,7 @@ Note that the data and the plots generated are named in the following convention
     
     Then, you need to activate the virtual environment.
     Type one of the following commands in the terminal:
-`source venv/Scripts/activate` in Windows \
+`source venv\Scripts\activate` in Windows \
 `source venv/bin/activate` in Linux
 
     After making sure the virtual environment is activated, you need to install the dependencies.
@@ -47,7 +47,8 @@ Note that the data and the plots generated are named in the following convention
 
     Finally, you need to run the main module.
     Type the following command in the terminal:
-`python src/main.py`
+`python src\main.py` in Windows \
+`python3 src/main.py` in Linux
 
     By default, the main module will run the code for plotting the error curves
     for a certain set of hyperparameters hardcoded in the start of "main.py".
